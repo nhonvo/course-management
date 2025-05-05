@@ -1,25 +1,38 @@
 [
-    {
-      "id": "c001",
-      "name": "React Basics",
-      "teacher": {
-        "name": "John Doe",
-        "email": "john@example.com"
+  {
+    "id": "1",
+    "name": "Math 101",
+    "teacher": "Mr. John",
+    "subscriptions": [
+      {
+        "id": "1",
+        "expiryDate": "2026-04-30",
+        "hasRenewed": true
       },
-      "calendar": ["Mon 9:00 - 11:00", "Wed 14:00 - 16:00"],
-      "registeredDate": "2025-04-01",
-      "expiryDate": "2025-06-01"
-    },
-    {
-      "id": "c002",
-      "name": "Next.js Advanced",
-      "teacher": {
-        "name": "Jane Smith",
-        "email": "jane@example.com"
+      {
+        "id": "2",
+        "expiryDate": "2027-05-04",
+        "hasRenewed": true
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "English 101",
+    "teacher": "Mr. John",
+    "subscriptions": [
+      {
+        "id": "1",
+        "month": "2025-04",
+        "expiryDate": "2025-04-30",
+        "hasRenewed": false
       },
-      "calendar": ["Tue 13:00 - 15:00", "Thu 10:00 - 12:00"],
-      "registeredDate": "2025-03-15",
-      "expiryDate": "2025-05-15"
-    }
-  ]
-  
+      {
+        "id": "2",
+        "month": "2025-05",
+        "expiryDate": "2025-05-04",
+        "hasRenewed": false
+      }
+    ]
+  }
+]
