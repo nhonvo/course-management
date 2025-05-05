@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/shared/components/ui/button";
 import toast from 'react-hot-toast';
 import { Course } from '../models/Course';
 import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogFooter, DialogHeader } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
+import { DialogFooter, DialogHeader } from '@/app/shared/components/ui/dialog';
+import { Input } from '@/app/shared/components/ui/input';
 import { Subscription } from '../models/Subscription';
 
 type Props = {

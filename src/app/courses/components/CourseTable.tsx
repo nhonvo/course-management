@@ -1,7 +1,7 @@
 import {
     Table, TableHeader, TableRow, TableHead, TableBody, TableCell
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from "@/app/shared/components/ui/table";
+import { Button } from "@/app/shared/components/ui/button";
 import { Course } from "../models/Course";
 
 interface Props {
