@@ -1,0 +1,25 @@
+[
+    {
+      "id": "c001",
+      "name": "React Basics",
+      "teacher": {
+        "name": "John Doe",
+        "email": "john@example.com"
+      },
+      "calendar": ["Mon 9:00 - 11:00", "Wed 14:00 - 16:00"],
+      "registeredDate": "2025-04-01",
+      "expiryDate": "2025-06-01"
+    },
+    {
+      "id": "c002",
+      "name": "Next.js Advanced",
+      "teacher": {
+        "name": "Jane Smith",
+        "email": "jane@example.com"
+      },
+      "calendar": ["Tue 13:00 - 15:00", "Thu 10:00 - 12:00"],
+      "registeredDate": "2025-03-15",
+      "expiryDate": "2025-05-15"
+    }
+  ]
+  
