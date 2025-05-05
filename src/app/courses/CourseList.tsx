@@ -1,16 +1,20 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { Course } from './models/Course';
-import CourseTable from "./components/CourseTable";
-import SubscriptionHistory from "./components/SubscriptionHistory";
 import toast from "react-hot-toast";
 import AddCourseModal from "./components/AddCourseModal";
+import { Subscription } from "./models/Subscription";
+import { Button } from "../shared/components/ui/button";
+import { Plus } from "lucide-react";
+import { showCourseAdded, showCourseDeleted } from "../shared/toastService";
+import CourseTable from "./components/CourseTable";
+
 
 const CourseList = () => {
     const [courses, setCourses] = useState<Course[]>([]);
-    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-    const [showAddModal, setShowAddModal] = useState(false); // ✅ Track modal visibility
+    const [showAddModal, setShowAddModal] = useState(false);
 
+    // Load initial data
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -24,114 +28,112 @@ const CourseList = () => {
         fetchCourses();
     }, []);
 
-    const handleCourseClick = useCallback((course: Course) => {
-        setSelectedCourse(course);
+    const handleAddCourse = useCallback((newCourse: Course) => {
+        const courseWithId = {
+            ...newCourse,
+            id: crypto.randomUUID(),
+        };
+
+        setCourses(prev => [...prev, courseWithId]);
+        setShowAddModal(false);
+        showCourseAdded(newCourse.name);
     }, []);
 
-    const handleExtend = useCallback((id: string) => {
-        setCourses((prevCourses) => {
-            const updatedCourses = prevCourses.map((course) => {
-                if (course.id !== id || course.subscriptions.some((sub) => sub.hasRenewed))
-                    return course;
-
-                const lastSubscription = course.subscriptions.at(-1);
-                const lastExpiryDate = new Date(lastSubscription!.expiryDate);
-                const newExpiryDate = new Date(lastExpiryDate);
-                newExpiryDate.setMonth(lastExpiryDate.getMonth() + 1);
-
-                const newSubscription = {
-                    id: crypto.randomUUID(),
-                    month: newExpiryDate.toISOString().slice(0, 7),
-                    expiryDate: newExpiryDate.toISOString().slice(0, 10),
-                    hasRenewed: true,
-                };
-
+    const handleAddSubscription = (courseId: string, newSubscription: Subscription) => {
+        // Find the course with the given courseId
+        const updatedCourses = courses.map(course => {
+            if (course.id === courseId) {
+                // Update the course by adding the new subscription
                 return {
                     ...course,
-                    subscriptions: [...course.subscriptions, newSubscription],
+                    subscriptions: [...course.subscriptions, newSubscription], // Add new subscription
                 };
-            });
-
-            // ✅ Keep selectedCourse in sync after update
-            const updatedSelected = updatedCourses.find(c => c.id === selectedCourse?.id) || null;
-            setSelectedCourse(updatedSelected);
-
-            return updatedCourses;
+            }
+            return course;
         });
 
-        toast.success('Subscription has been extended!');
-    }, [selectedCourse]);
+        // Update state (assuming `setCourses` is the state setter function)
+        setCourses(updatedCourses);
 
-    const toggleRenewable = useCallback((sub: { id: string; hasRenewed: boolean }) => {
-        setCourses((prevCourses) =>
-            prevCourses.map((course) => {
-                if (!selectedCourse || course.id !== selectedCourse.id) return course;
+        // Show toast notification
+        toast(`Added subscription to course ${courseId}`, newSubscription);
+    };
 
-                const updatedSubscriptions = course.subscriptions.map((subscription) =>
-                    subscription.id === sub.id
-                        ? { ...subscription, hasRenewed: !subscription.hasRenewed }
-                        : subscription
-                );
-
-                return { ...course, subscriptions: updatedSubscriptions };
-            })
-        );
-
-        setSelectedCourse((prevCourse) => {
-            if (!prevCourse) return null;
-
-            const updatedSubscriptions = prevCourse.subscriptions.map((subscription) =>
-                subscription.id === sub.id
-                    ? { ...subscription, hasRenewed: !subscription.hasRenewed }
-                    : subscription
-            );
-
-            return { ...prevCourse, subscriptions: updatedSubscriptions };
-        });
-    }, [selectedCourse]);
-
-    const handleAddCourse = useCallback((newCourse: Course) => {
-        newCourse.id = crypto.randomUUID();
-
-        setCourses((prevCourses) => {
-            const updatedCourses = [...prevCourses, newCourse];
-            setSelectedCourse(newCourse); // ✅ Auto-select new course
-            return updatedCourses;
+    const handleRemoveSubscription = (courseId: string, subscriptionId: string) => {
+        // Remove subscription from the specific course
+        const updatedCourses = courses.map(course => {
+            if (course.id === courseId) {
+                // Remove the subscription with the given subscriptionId
+                return {
+                    ...course,
+                    subscriptions: course.subscriptions.filter(sub => sub.id !== subscriptionId),
+                };
+            }
+            return course;
         });
 
-        toast.success('Course added successfully!');
-        setShowAddModal(false); // ✅ Close modal on add
-    }, []);
+        // Update state (assuming `setCourses` is the state setter function)
+        setCourses(updatedCourses);
+
+        // Show toast notification
+        toast(`Removed subscription ${subscriptionId} from course ${courseId}`);
+    };
+
+    const handleUpdateSubscriptionStatus = (courseId: string, subscriptionId: string) => {
+        // Update the subscription status (for example, toggle the `hasRenewed` status)
+        const updatedCourses = courses.map(course => {
+            if (course.id === courseId) {
+                return {
+                    ...course,
+                    subscriptions: course.subscriptions.map(sub => {
+                        if (sub.id === subscriptionId) {
+                            // Toggle subscription renewal status
+                            return { ...sub, hasRenewed: !sub.hasRenewed };
+                        }
+                        return sub;
+                    }),
+                };
+            }
+            return course;
+        });
+
+        // Update state (assuming `setCourses` is the state setter function)
+        setCourses(updatedCourses);
+
+        // Show toast notification
+        toast(`Updated subscription status for course ${courseId}, subscription ${subscriptionId}`);
+    };
+
+    const handleDeleteCourse = async (courseId: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this course?");
+        if (!confirmed) return;
+
+        const updatedCourses = courses.filter(course => course.id !== courseId);
+        setCourses(updatedCourses);
+        showCourseDeleted(courseId)
+    };
 
     return (
-        <div className="p-4">
+        <div className="p-4 h-screen w-screen">
             <div className="mb-4">
-                <button
-                    onClick={() => setShowAddModal(true)}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
-                >
-                    + Add Course
-                </button>
+                <Button onClick={() => setShowAddModal(true)}>
+                    <Plus size={16} /> Add Course
+                </Button>
             </div>
 
             <AddCourseModal
                 isOpen={showAddModal}
-                onClose={() => setShowAddModal(false)} // ✅ Close only via onClose
+                onClose={() => setShowAddModal(false)}
                 onAdd={handleAddCourse}
             />
 
             <CourseTable
                 courses={courses}
-                onExtend={handleExtend}
-                onCourseClick={handleCourseClick}
+                onAddSubscription={handleAddSubscription}
+                onRemoveSubscription={handleRemoveSubscription}
+                onUpdateSubscriptionStatus={handleUpdateSubscriptionStatus}
+                onDeleteCourse={handleDeleteCourse}
             />
-
-            {selectedCourse && (
-                <SubscriptionHistory
-                    course={selectedCourse}
-                    onToggleRenewed={toggleRenewable}
-                />
-            )}
         </div>
     );
 };

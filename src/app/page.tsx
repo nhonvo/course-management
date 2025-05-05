@@ -3,9 +3,12 @@ import CourseList from './courses/CourseList';
 
 const Page = () => {
     return (
-        <div>
-            <CourseList />
-            <Toaster />
+        <div className="p-6 space-y-12">
+            <h1 className="text-2xl font-bold">Course Management</h1>
+            <div className="flex justify-between items-center">
+                <CourseList />
+                <Toaster />
+            </div>
         </div>
     );
 }

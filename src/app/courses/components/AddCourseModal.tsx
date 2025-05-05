@@ -16,8 +16,8 @@ type Props = {
 };
 
 const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
-    const [courseName, setCourseName] = useState('abcd');
-    const [teacher, setTeacher] = useState('abcd');
+    const [courseName, setCourseName] = useState('');
+    const [teacher, setTeacher] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
 
     const handleAdd = () => {
@@ -27,7 +27,7 @@ const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
         }
 
         if (!expiryDate) {
-            toast.error('Subscription expiry date are required');
+            toast.error('Subscription expiry date is required');
             return;
         }
 
@@ -44,17 +44,21 @@ const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
             subscriptions: [newSubscription],
         };
 
-        onAdd(newCourse);
-        toast.success('Course added!');
-        onClose();
-        setCourseName('');
-        setTeacher('');
-        setExpiryDate('');
+        try {
+            onAdd(newCourse);
+            toast.success('Course added!');
+            onClose(); // Close the modal
+            setCourseName('');
+            setTeacher('');
+            setExpiryDate('');
+        } catch {
+            toast.error('Failed to add course');
+        }
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] bg-white rounded-lg p-6 shadow-lg transition-all duration-300">
                 <DialogHeader>
                     <DialogTitle>Add New Course</DialogTitle>
                 </DialogHeader>
@@ -63,20 +67,23 @@ const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
                         placeholder="Course name"
                         value={courseName}
                         onChange={(e) => setCourseName(e.target.value)}
+                        aria-label="Course Name"
                     />
                     <Input
                         placeholder="Teacher name"
                         value={teacher}
                         onChange={(e) => setTeacher(e.target.value)}
+                        aria-label="Teacher Name"
                     />
                     <Input
                         type="date"
                         placeholder="Expiry date"
                         value={expiryDate}
                         onChange={(e) => setExpiryDate(e.target.value)}
+                        aria-label="Expiry Date"
                     />
                 </div>
-                <DialogFooter>
+                <DialogFooter className="flex justify-between gap-4">
                     <Button variant="outline" onClick={onClose}>Cancel</Button>
                     <Button onClick={handleAdd}>Add Course</Button>
                 </DialogFooter>
