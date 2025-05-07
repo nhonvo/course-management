@@ -1,5 +1,5 @@
 import { Toaster } from 'react-hot-toast';
-import CourseList from './courses/CourseList';
+import CourseList from './courses/page';
 
 const Page = () => {
     return (

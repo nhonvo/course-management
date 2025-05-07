@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { Course } from './models/Course';
+import { Course } from '../models/Course';
 import toast from "react-hot-toast";
-import AddCourseModal from "./components/AddCourseModal";
-import { Subscription } from "./models/Subscription";
+import AddCourseModal from "../components/AddCourseModal";
+import { Subscription } from "../models/Subscription";
 import { Button } from "../shared/components/ui/button";
 import { Plus } from "lucide-react";
 import { showCourseAdded, showCourseDeleted } from "../shared/toastService";
-import CourseTable from "./components/CourseTable";
+import CourseTable from "../components/CourseTable";
+// import { getAllCourses } from "./api";
 
 
 const CourseList = () => {
@@ -15,6 +16,7 @@ const CourseList = () => {
     const [showAddModal, setShowAddModal] = useState(false);
 
     // Load initial data
+
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -22,7 +24,7 @@ const CourseList = () => {
                 const data = await res.json();
                 setCourses(data);
             } catch {
-                toast.error("Failed to load courses.");
+                toast.error('Failed to load courses.');
             }
         };
         fetchCourses();
