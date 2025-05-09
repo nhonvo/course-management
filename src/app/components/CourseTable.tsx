@@ -7,15 +7,15 @@ import {
     TableCell,
 } from "@/app/shared/components/ui/table";
 import { Button } from "@/app/shared/components/ui/button";
-import { Course } from "../models/Course";
 import { Fragment, useState } from "react";
 import clsx from "clsx";
-import { Subscription } from "../models/Subscription";
 import { Trash2 } from "lucide-react";
 import { format, differenceInDays, isBefore, isAfter } from "date-fns";
+import { Course1 } from '@/app/models/Course';
+import { Subscription } from "../models/Subscription";
 
 interface Props {
-    courses: Course[];
+    courses: Course1[];
     onAddSubscription: (courseId: string, newSubscription: Subscription) => void;
     onRemoveSubscription: (courseId: string, subscriptionId: string) => void;
     onUpdateSubscriptionStatus: (
@@ -40,7 +40,6 @@ const CourseTable = ({
     const [newSubscription, setNewSubscription] = useState<Subscription | null>(
         null
     );
-
     const toggleExpand = (id: string) => {
         setExpandedCourseId((prev) => (prev === id ? null : id));
     };
@@ -82,7 +81,7 @@ const CourseTable = ({
                     const expanded = expandedCourseId === course.id;
 
                     return (
-                        <Fragment key={course.id}>
+                        <Fragment key={course._id}>
                             <TableRow
                                 className="cursor-pointer hover:bg-gray-50"
                                 onClick={() => toggleExpand(course.id)}
@@ -127,7 +126,7 @@ const CourseTable = ({
                                     <Button
                                         onClick={(e) => {
                                             preventPropagation(e);
-                                            onDeleteCourse(course.id);
+                                            onDeleteCourse(course._id ?? "");
                                         }}
                                         className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded inline-flex items-center gap-1"
                                     >

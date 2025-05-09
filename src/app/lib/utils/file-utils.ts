@@ -1,4 +1,4 @@
-import { Course } from '@/app/models/Course';
+import { Course1 } from '@/app/models/Course';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -9,6 +9,6 @@ export async function readData() {
     return JSON.parse(data);
 }
 
-export async function writeData(data: Course[]) {
+export async function writeData(data: Course1[]) {
     await fs.writeFile(dataPath, JSON.stringify(data, null, 2));
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
-import { Course } from '../models/Course';
+import { Course1 } from '../models/Course';
 import toast from "react-hot-toast";
 import { Subscription } from "../models/Subscription";
 import { showCourseAdded, showCourseDeleted } from "../shared/toastService";
 
 export function useCourses() {
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<Course1[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
 
     const fetchCourses = async () => {
@@ -21,7 +21,7 @@ export function useCourses() {
         fetchCourses();
     }, []);
 
-    const handleAddCourse = useCallback(async (newCourse: Course) => {
+    const handleAddCourse = useCallback(async (newCourse: Course1) => {
         try {
             const res = await fetch('/api/course', {
                 method: 'POST',
@@ -136,8 +136,9 @@ export function useCourses() {
 
             if (!res.ok) throw new Error();
 
-            setCourses(prev => prev.filter(course => course.id !== courseId));
             showCourseDeleted(courseId);
+            setCourses(prev => prev.filter(course => course.id !== courseId));
+
         } catch {
             toast.error('Failed to delete course.');
         }

@@ -3,16 +3,16 @@
 import { useState } from 'react';
 import { Button } from "@/app/shared/components/ui/button";
 import toast from 'react-hot-toast';
-import { Course } from '../models/Course';
 import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 import { DialogFooter, DialogHeader } from '@/app/shared/components/ui/dialog';
 import { Input } from '@/app/shared/components/ui/input';
+import {  Course1 } from '@/app/models/Course';
 import { Subscription } from '../models/Subscription';
 
 type Props = {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (course: Course) => void;
+    onAdd: (course: Course1) => void;
 };
 
 const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
@@ -37,7 +37,7 @@ const AddCourseModal = ({ isOpen, onClose, onAdd }: Props) => {
             hasRenewed: true,
         };
 
-        const newCourse: Course = {
+        const newCourse: Course1 = {
             id: crypto.randomUUID(),
             name: courseName,
             teacher,

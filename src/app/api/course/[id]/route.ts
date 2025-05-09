@@ -1,40 +1,40 @@
-import { readData, writeData } from '@/app/lib/utils/file-utils';
-import { Course } from '@/app/models/Course';
 import { NextRequest, NextResponse } from 'next/server';
+import { Course } from '@/app/models/Course';
+import { connectToDatabase } from '@/app/lib/db/mongodb';
+import { isValidObjectId } from 'mongoose';
 
-// UPDATE a course
-export async function PUT(req: NextRequest,  { params }: { params: Promise<{ id: string }> } ) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        await connectToDatabase();
         const { id } = await params;
-        const updatedCourse = await req.json();
-        const courses: Course[] = await readData();
+        const update = await req.json();
 
-        const index = courses.findIndex(c => c.id === id);
-        if (index === -1) return NextResponse.json({ message: 'Course not found' }, { status: 404 });
+        const course = await Course.findByIdAndUpdate(id, update, { new: true });
+        if (!course) return NextResponse.json({ message: 'Course not found' }, { status: 404 });
 
-        courses[index] = { ...courses[index], ...updatedCourse };
-        await writeData(courses);
-
-        return NextResponse.json(courses[index]);
-    } catch {
+        return NextResponse.json(course);
+    } catch (error) {
+        console.error("Error updating course:", error);
         return NextResponse.json({ message: 'Failed to update course.' }, { status: 500 });
     }
 }
 
-// DELETE a course
-export async function DELETE(request: NextRequest,  { params }: { params: Promise<{ id: string }> } ) {
+export async function DELETE(req: NextRequest,  { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        const courses: Course[] = await readData();
-        const updatedCourses = courses.filter(c => c.id !== id);
 
-        if (courses.length === updatedCourses.length) {
-            return NextResponse.json({ message: 'Course not found' }, { status: 404 });
+        if (!isValidObjectId(id)) {
+            return NextResponse.json({ message: 'Invalid course ID' }, { status: 400 });
         }
 
-        await writeData(updatedCourses);
+        await connectToDatabase();
+        const deleted = await Course.findByIdAndDelete(id);
+
+        if (!deleted) return NextResponse.json({ message: 'Course not found' }, { status: 404 });
+
         return NextResponse.json({ message: 'Course deleted' });
-    } catch {
+    } catch (err) {
+        console.error(err);
         return NextResponse.json({ message: 'Failed to delete course.' }, { status: 500 });
     }
 }
