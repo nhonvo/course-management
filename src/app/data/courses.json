@@ -1,0 +1,50 @@
+[
+  {
+    "id": "6",
+    "name": "Math 101",
+    "teacher": "Mr. John",
+    "subscriptions": [
+      {
+        "id": "1",
+        "expiryDate": "2026-04-30",
+        "hasRenewed": true
+      },
+      {
+        "id": "2",
+        "expiryDate": "2027-05-04",
+        "hasRenewed": true
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "English 101",
+    "teacher": "Mr. John",
+    "subscriptions": [
+      {
+        "id": "4",
+        "month": "2025-04",
+        "expiryDate": "2025-04-30",
+        "hasRenewed": true
+      },
+      {
+        "id": "3",
+        "month": "2025-05",
+        "expiryDate": "2025-05-04",
+        "hasRenewed": false
+      }
+    ]
+  },
+  {
+    "id": "f5400460-f9aa-49bd-9533-44b8daca6429",
+    "name": "a",
+    "teacher": "a",
+    "subscriptions": [
+      {
+        "id": "b67f5ba3-9d0c-49f5-910e-5ff90bac5af6",
+        "expiryDate": "2025-05-18",
+        "hasRenewed": true
+      }
+    ]
+  }
+]

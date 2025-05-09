@@ -8,19 +8,16 @@ import { Button } from "../shared/components/ui/button";
 import { Plus } from "lucide-react";
 import { showCourseAdded, showCourseDeleted } from "../shared/toastService";
 import CourseTable from "../components/CourseTable";
-// import { getAllCourses } from "./api";
-
 
 const CourseList = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
 
     // Load initial data
-
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await fetch("data/courses.json");
+                const res = await fetch("/api/course");
                 const data = await res.json();
                 setCourses(data);
             } catch {
@@ -30,42 +27,58 @@ const CourseList = () => {
         fetchCourses();
     }, []);
 
-    const handleAddCourse = useCallback((newCourse: Course) => {
-        const courseWithId = {
-            ...newCourse,
-            id: crypto.randomUUID(),
-        };
+    const handleAddCourse = useCallback(async (newCourse: Course) => {
+        try {
+            // console.log("here")
+            // console.log(newCourse.subscriptions[0].expiryDate)
+            // console.log(newCourse.subscriptions[0].id)
+            const res = await fetch('/api/course', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newCourse),
+            });
 
-        setCourses(prev => [...prev, courseWithId]);
-        setShowAddModal(false);
-        showCourseAdded(newCourse.name);
+            if (!res.ok) throw new Error();
+
+            const created = await res.json();
+            setCourses(prev => [...prev, created]);
+            setShowAddModal(false);
+            showCourseAdded(created.name);
+        } catch {
+            toast.error('Failed to add course.');
+        }
     }, []);
-
-    const handleAddSubscription = (courseId: string, newSubscription: Subscription) => {
-        // Find the course with the given courseId
+    
+    const handleAddSubscription = async (courseId: string, newSubscription: Subscription) => {
         const updatedCourses = courses.map(course => {
             if (course.id === courseId) {
-                // Update the course by adding the new subscription
                 return {
                     ...course,
-                    subscriptions: [...course.subscriptions, newSubscription], // Add new subscription
+                    subscriptions: [...course.subscriptions, newSubscription],
                 };
             }
             return course;
         });
 
-        // Update state (assuming `setCourses` is the state setter function)
         setCourses(updatedCourses);
 
-        // Show toast notification
-        toast(`Added subscription to course ${courseId}`, newSubscription);
+        try {
+            await fetch(`/api/course/${courseId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subscriptions: updatedCourses.find(c => c.id === courseId)?.subscriptions,
+                }),
+            });
+            toast.success(`Added subscription to course ${courseId}`);
+        } catch {
+            toast.error('Failed to add subscription.');
+        }
     };
 
-    const handleRemoveSubscription = (courseId: string, subscriptionId: string) => {
-        // Remove subscription from the specific course
+    const handleRemoveSubscription = async (courseId: string, subscriptionId: string) => {
         const updatedCourses = courses.map(course => {
             if (course.id === courseId) {
-                // Remove the subscription with the given subscriptionId
                 return {
                     ...course,
                     subscriptions: course.subscriptions.filter(sub => sub.id !== subscriptionId),
@@ -74,22 +87,29 @@ const CourseList = () => {
             return course;
         });
 
-        // Update state (assuming `setCourses` is the state setter function)
         setCourses(updatedCourses);
 
-        // Show toast notification
-        toast(`Removed subscription ${subscriptionId} from course ${courseId}`);
+        try {
+            await fetch(`/api/course/${courseId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subscriptions: updatedCourses.find(c => c.id === courseId)?.subscriptions,
+                }),
+            });
+            toast.success(`Removed subscription ${subscriptionId} from course ${courseId}`);
+        } catch {
+            toast.error('Failed to remove subscription.');
+        }
     };
 
-    const handleUpdateSubscriptionStatus = (courseId: string, subscriptionId: string) => {
-        // Update the subscription status (for example, toggle the `hasRenewed` status)
+    const handleUpdateSubscriptionStatus = async (courseId: string, subscriptionId: string) => {
         const updatedCourses = courses.map(course => {
             if (course.id === courseId) {
                 return {
                     ...course,
                     subscriptions: course.subscriptions.map(sub => {
                         if (sub.id === subscriptionId) {
-                            // Toggle subscription renewal status
                             return { ...sub, hasRenewed: !sub.hasRenewed };
                         }
                         return sub;
@@ -99,20 +119,37 @@ const CourseList = () => {
             return course;
         });
 
-        // Update state (assuming `setCourses` is the state setter function)
         setCourses(updatedCourses);
 
-        // Show toast notification
-        toast(`Updated subscription status for course ${courseId}, subscription ${subscriptionId}`);
+        try {
+            await fetch(`/api/course/${courseId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subscriptions: updatedCourses.find(c => c.id === courseId)?.subscriptions,
+                }),
+            });
+            toast.success(`Updated subscription status for ${subscriptionId}`);
+        } catch {
+            toast.error('Failed to update subscription status.');
+        }
     };
-
     const handleDeleteCourse = async (courseId: string) => {
-        const confirmed = window.confirm("Are you sure you want to delete this course?");
+        const confirmed = window.confirm('Are you sure you want to delete this course?');
         if (!confirmed) return;
 
-        const updatedCourses = courses.filter(course => course.id !== courseId);
-        setCourses(updatedCourses);
-        showCourseDeleted(courseId)
+        try {
+            const res = await fetch(`/api/course/${courseId}`, {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) throw new Error();
+
+            setCourses(prev => prev.filter(course => course.id !== courseId));
+            showCourseDeleted(courseId);
+        } catch {
+            toast.error('Failed to delete course.');
+        }
     };
 
     return (
