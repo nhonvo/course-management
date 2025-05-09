@@ -1,4 +1,4 @@
-import { readData, writeData } from '@/app/lib/file-utils';
+import { readData, writeData } from '@/app/lib/utils/file-utils';
 import { Course } from '@/app/models/Course';
 import { NextRequest, NextResponse } from 'next/server';
 

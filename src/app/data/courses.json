@@ -31,18 +31,11 @@
         "id": "3",
         "month": "2025-05",
         "expiryDate": "2025-05-04",
-        "hasRenewed": false
-      }
-    ]
-  },
-  {
-    "id": "f5400460-f9aa-49bd-9533-44b8daca6429",
-    "name": "a",
-    "teacher": "a",
-    "subscriptions": [
+        "hasRenewed": true
+      },
       {
-        "id": "b67f5ba3-9d0c-49f5-910e-5ff90bac5af6",
-        "expiryDate": "2025-05-18",
+        "id": "61be1b9c-0cc2-4f10-abc3-9175a396b947",
+        "expiryDate": "2025-05-17",
         "hasRenewed": true
       }
     ]
