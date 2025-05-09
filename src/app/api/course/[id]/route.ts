@@ -3,9 +3,9 @@ import { Course } from '@/app/models/Course';
 import { NextRequest, NextResponse } from 'next/server';
 
 // UPDATE a course
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest,  { params }: { params: Promise<{ id: string }> } ) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const updatedCourse = await req.json();
         const courses: Course[] = await readData();
 
@@ -22,9 +22,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE a course
-export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(request: NextRequest,  { params }: { params: Promise<{ id: string }> } ) {
     try {
-        const { id } = context.params;
+        const { id } = await params;
         const courses: Course[] = await readData();
         const updatedCourses = courses.filter(c => c.id !== id);
 
