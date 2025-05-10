@@ -1,12 +1,12 @@
-import CourseList from 'src/features/courses/pages';
 import { Toaster } from 'react-hot-toast';
+import Home from 'src/features/transactions/pages';
 
 const Page = () => {
     return (
         <div className="p-6 space-y-12">
-            <h1 className="text-2xl font-bold">Course Management</h1>
+            <h1 className="text-2xl font-bold">Finance Dashboard</h1>
             <div className="flex justify-between items-center">
-                <CourseList />
+                <Home />
                 <Toaster />
             </div>
         </div>
