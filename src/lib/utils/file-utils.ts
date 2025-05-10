@@ -1,4 +1,4 @@
-import { Course1 } from '@/app/models/Course';
+import { Course1 } from 'src/models/Course';
 import fs from 'fs/promises';
 import path from 'path';
 

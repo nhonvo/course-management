@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Course } from '@/app/models/Course';
-import { connectToDatabase } from '@/app/lib/db/mongodb';
+import { Course } from 'src/models/Course';
+import { connectToDatabase } from 'src/lib/db/mongodb';
 import { isValidObjectId } from 'mongoose';
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 }
 
-export async function DELETE(req: NextRequest,  { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 

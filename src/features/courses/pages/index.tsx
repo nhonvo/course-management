@@ -1,9 +1,9 @@
 "use client";
 import AddCourseModal from "../components/AddCourseModal";
-import { Button } from "../shared/components/ui/button";
 import { Plus } from "lucide-react";
 import CourseTable from "../components/CourseTable";
 import { useCourses } from "../hooks/useCourses";
+import { Button } from "src/shared/components/ui/button";
 
 const CourseList = () => {
     const { courses, showAddModal,

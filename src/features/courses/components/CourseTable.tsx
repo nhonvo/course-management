@@ -5,14 +5,14 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/app/shared/components/ui/table";
-import { Button } from "@/app/shared/components/ui/button";
+} from "src/shared/components/ui/table";
+import { Button } from "src/shared/components/ui/button";
 import { Fragment, useState } from "react";
 import clsx from "clsx";
 import { Trash2 } from "lucide-react";
 import { format, differenceInDays, isBefore, isAfter } from "date-fns";
-import { Course1 } from '@/app/models/Course';
-import { Subscription } from "../models/Subscription";
+import { Course1 } from 'src/models/Course';
+import { Subscription } from "../../../models/Subscription";
 
 interface Props {
     courses: Course1[];

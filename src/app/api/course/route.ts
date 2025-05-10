@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/app/lib/db/mongodb';
-import { Course } from '@/app/models/Course';
+import { connectToDatabase } from 'src/lib/db/mongodb';
+import { Course } from 'src/models/Course';
 
 export async function GET() {
     try {
         await connectToDatabase();
         const courses = await Course.find();
-        console.log(courses)
         return NextResponse.json(courses);
     } catch (error) {
         console.error(error);

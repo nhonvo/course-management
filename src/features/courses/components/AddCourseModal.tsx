@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from "@/app/shared/components/ui/button";
 import toast from 'react-hot-toast';
 import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogFooter, DialogHeader } from '@/app/shared/components/ui/dialog';
-import { Input } from '@/app/shared/components/ui/input';
-import {  Course1 } from '@/app/models/Course';
-import { Subscription } from '../models/Subscription';
+import { Subscription } from '../../../models/Subscription';
+import { DialogFooter, DialogHeader } from 'src/shared/components/ui/dialog';
+import { Course1 } from 'src/models/Course';
+import { Input } from 'src/shared/components/ui/input';
+import { Button } from 'src/shared/components/ui/button';
 
 type Props = {
     isOpen: boolean;
