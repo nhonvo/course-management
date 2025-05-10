@@ -1,62 +1,31 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Transaction } from 'src/models/Transaction';
-import { getTransactions } from '../api/transactionApi';
-import { TransactionFiltersProps } from 'src/models/TransactionFilters';
+import { useState } from 'react';
+import { useTransactionData } from './useTransactionData';
 import { SortableColumn } from '../type/SortableColumn';
-import { getDefaultDateRange } from 'src/lib/utilities';
-
+import { sortTransactions } from 'src/lib/sortTransactions';
 
 export function useTransactions() {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const { start_date, end_date } = getDefaultDateRange();
+    const { transactions, error, loading, filters, handleChange } = useTransactionData();
 
-    const [filters, setFilters] = useState<TransactionFiltersProps>({
-        order_by: true,
-        sort_by: 'debit',
-        offset: 0,
-        clean: false,
-        limit: -1,
-        start_date: start_date,
-        end_date: end_date,
-    });
-    const [sortColumn, setSortColumn] = useState<string | null>(null);
+    const [sortColumn, setSortColumn] = useState<SortableColumn | null>(null);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     const handleSort = (column: SortableColumn) => {
         if (sortColumn === column) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+            setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
         } else {
             setSortColumn(column);
             setSortOrder('asc');
         }
     };
-    const sortedTransactions = [...transactions].sort((a, b) => {
-        if (!sortColumn) return 0;
-        const aValue = a[sortColumn];
-        const bValue = b[sortColumn];
 
-        if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-        return 0;
-    });
+    const sortedTransactions = sortTransactions(transactions, sortColumn, sortOrder);
 
-    useEffect(() => {
-        setLoading(true);
-        getTransactions(filters)
-            .then(setTransactions)
-            .catch(err => setError(err.message))
-            .finally(() => setLoading(false));
-    }, [filters]); // clean & safe
+    const totalDebit = sortedTransactions.reduce((acc, tx) => acc + (tx.debit || 0), 0);
+    const totalCredit = sortedTransactions.reduce((acc, tx) => acc + (tx.credit || 0), 0);
+    const netChange = totalCredit - totalDebit;
+    const currentBalance = sortedTransactions.at(-1)?.balance || 0;
 
-    const handleChange = (name: string, value: string | number | boolean) => {
-        setFilters(prev => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
     return {
         transactions,
         error,
@@ -65,7 +34,11 @@ export function useTransactions() {
         handleChange,
         sortColumn,
         sortOrder,
+        handleSort,
         sortedTransactions,
-        handleSort
+        totalDebit,
+        totalCredit,
+        netChange,
+        currentBalance,
     };
 }

@@ -63,6 +63,17 @@ export default function TransactionFilters({ filters, handleChange }: Props) {
                 />
                 <Label htmlFor="clean">Clean</Label>
             </div>
+            <div>
+                <Label htmlFor="search">Search</Label>
+                <Input
+                    type="text"
+                    name="search"
+                    placeholder="Search description..."
+                    value={filters.search || ''}
+                    onChange={(e) => handleChange('search', e.target.value)}
+                />
+            </div>
+
         </section>
     );
 }

@@ -7,4 +7,5 @@ export interface FetchTransactionsParams {
     limit?: number;
     start_date?: string; // in format YYYY-MM-DD
     end_date?: string;
+    query?:string
 }

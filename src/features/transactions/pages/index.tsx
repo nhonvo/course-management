@@ -2,12 +2,11 @@
 
 import { useTransactions } from '../hooks/useTransactions';
 import TransactionFilters from '../components/TransactionFilters';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { SortableColumn } from '../type/SortableColumn';
 import SummaryCards from '../components/SummaryCards';
 import BalanceLineChart from '../components/BalanceLineChart';
 import MonthlyIncomeExpenseChart from '../components/MonthlyIncomeExpenseChart';
-import { currencyFormat } from 'src/lib/utilities';
+import TableTransaction from '../components/TableTransaction';
+import { useState } from 'react';
 
 export default function Home() {
     const {
@@ -19,68 +18,91 @@ export default function Home() {
         sortColumn,
         sortedTransactions,
         handleSort,
+        totalDebit,
+        totalCredit,
+        netChange,
+        currentBalance,
     } = useTransactions();
-    const totalDebit = sortedTransactions.reduce((acc, tx) => acc + (tx.debit || 0), 0);
-    const totalCredit = sortedTransactions.reduce((acc, tx) => acc + (tx.credit || 0), 0);
-    const netChange = totalCredit - totalDebit;
-    const currentBalance = sortedTransactions.at(-1)?.balance || 0;
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <main className="p-6 space-y-6 max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold">Transaction Dashboard</h1>
-            <SummaryCards
-                totalDebit={totalDebit}
-                totalCredit={totalCredit}
-                netChange={netChange}
-                currentBalance={currentBalance}
-            />
-            <MonthlyIncomeExpenseChart transactions={sortedTransactions} />
-            
-            <BalanceLineChart data={sortedTransactions.map(tx => ({
-                transaction_date: tx.transaction_date,
-                balance: tx.balance,
-            }))} />
+        <>
+            <div className="min-h-screen max-w-screen flex flex-col md:flex-row">
+                {/* Sidebar */}
+                <aside
+                    className={`w-64 bg-gray-100 p-6 border-r border-gray-300 space-y-4 fixed inset-0 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                        } md:translate-x-0 md:relative md:block md:w-64`}
+                >
+                    <button
+                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        className="md:hidden absolute top-6 right-6 text-gray-700"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
 
-            {/* Filter Controls */}
-            <TransactionFilters filters={filters} handleChange={handleChange} />
+                    </button>
+                    <h2 className="text-xl font-bold mb-4">Sections</h2>
+                    <nav className="space-y-2">
+                        <a href="#overview" className="block text-gray-700 hover:text-blue-600">Overview</a>
+                        <a href="#monthly" className="block text-gray-700 hover:text-blue-600">Monthly</a>
+                        <a href="#saving" className="block text-gray-700 hover:text-blue-600">Saving & Investment</a>
+                        <a href="#rent" className="block text-gray-700 hover:text-blue-600">House Rent</a>
+                        <a href="#highlight" className="block text-gray-700 hover:text-blue-600">Highlight</a>
+                    </nav>
+                </aside>
 
-            {/* Table Display */}
-            <section>
-                {loading ? (
-                    <p className="text-gray-500">Loading transactions...</p>
-                ) : error ? (
-                    <p className="text-red-600">Error: {error}</p>
-                ) : (
-                    <Table className="min-w-full border border-gray-300 mt-4">
-                        <TableHeader className="bg-gray-100">
-                            <TableRow>
-                                {['transaction_date', 'description', 'debit', 'credit', 'balance', 'category'].map((col) => (
-                                    <TableHead
-                                        key={col}
-                                        className="border px-4 py-2 cursor-pointer"
-                                        onClick={() => handleSort(col as SortableColumn)}
-                                    >
-                                        {col.charAt(0).toUpperCase() + col.slice(1).replace('_', ' ')}{' '}
-                                        {sortColumn === col && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {sortedTransactions.map((tx, idx) => (
-                                <TableRow key={idx}>
-                                    <TableCell className="border px-4 py-2">{tx.transaction_date}</TableCell>
-                                    <TableCell className="border px-4 py-2">{tx.description}</TableCell>
-                                    <TableCell className="border px-4 py-2">{currencyFormat(tx.debit)}</TableCell>
-                                    <TableCell className="border px-4 py-2">{currencyFormat(tx.credit)}</TableCell>
-                                    <TableCell className="border px-4 py-2">{currencyFormat(tx.balance)}</TableCell>
-                                    <TableCell className="border px-4 py-2">{tx.category}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </section>
-        </main>
+                {/* Main content */}
+                <main className="flex-1 p-6 space-y-6 max-w-7xl ">
+                    <TransactionFilters filters={filters} handleChange={handleChange} />
+
+                    <section id="overview">
+                        <h1 className="text-2xl font-bold">Overview</h1>
+                        <SummaryCards
+                            totalDebit={totalDebit}
+                            totalCredit={totalCredit}
+                            netChange={netChange}
+                            currentBalance={currentBalance}
+                        />
+                        <MonthlyIncomeExpenseChart transactions={sortedTransactions} />
+                        <BalanceLineChart data={sortedTransactions.map(tx => ({
+                            transaction_date: tx.transaction_date,
+                            balance: tx.balance,
+                        }))} />
+                    </section>
+
+                    <section id="monthly">
+                        <h2 className="text-xl font-semibold">Monthly</h2>
+                        {/* Add Monthly charts or data here */}
+                    </section>
+
+                    <section id="saving">
+                        <h2 className="text-xl font-semibold">Saving & Investment</h2>
+                        {/* Add savings/investment insights here */}
+                    </section>
+
+                    <section id="rent">
+                        <h2 className="text-xl font-semibold">House Rent</h2>
+                        {/* Filter or visualize rent-related transactions */}
+                    </section>
+
+                    <section id="highlight">
+                        <h2 className="text-xl font-semibold">Highlight</h2>
+                        {/* Top spending, top category, highest month, etc. */}
+                    </section>
+
+                    {/* Filters and table */}
+                    <TableTransaction
+                        loading={loading}
+                        error={error}
+                        handleSort={handleSort}
+                        sortColumn={sortColumn}
+                        sortOrder={sortOrder}
+                        sortedTransactions={sortedTransactions}
+                    />
+                </main>
+            </div>
+        </>
     );
 }

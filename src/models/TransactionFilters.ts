@@ -7,4 +7,5 @@ export interface TransactionFiltersProps {
     limit?: number;
     start_date?: string;
     end_date?: string;
+    search?: string; 
 }
