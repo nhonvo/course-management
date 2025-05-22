@@ -29,7 +29,9 @@ export function useTransactions() {
         totalCredit: totalCredit,
         netChange: netChange,
         currentBalance: currentBalance,
-        expenseTreeMap: expenseTreeMap 
+        expenseTreeMap: expenseTreeMap,
+        saving: saving,
+        invest: invest
     } = useOverviewTransactions(filters, sortedTransactions, loading);
 
     return {
@@ -48,6 +50,8 @@ export function useTransactions() {
         totalCredit,
         netChange,
         currentBalance,
-        expenseTreeMap
+        expenseTreeMap,
+        saving,
+        invest
     };
 }

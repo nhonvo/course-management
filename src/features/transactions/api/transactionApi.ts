@@ -24,3 +24,13 @@ export const getExpenseTree = async (params: FetchTransactionsParams): Promise<E
   const query = new URLSearchParams(params as Record<string, string>).toString();
   return fetcher<ExpenseTreeMapModel[]>(`/api/v1/transactions/expense-tree?${query}`);
 };
+
+export const getSavingTransactions = async (params: FetchTransactionsParams): Promise<Transaction[]> => {
+  const query = new URLSearchParams(params as Record<string, string>).toString();
+  return fetcher<Transaction[]>(`/api/v1/transactions/saving?${query}`);
+};
+
+export const getInvestTransactions = async (params: FetchTransactionsParams): Promise<Transaction[]> => {
+  const query = new URLSearchParams(params as Record<string, string>).toString();
+  return fetcher<Transaction[]>(`/api/v1/transactions/investment?${query}`);
+};

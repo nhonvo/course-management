@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FetchTransactionsParams } from 'src/models/FetchTransactionsParams';
 import { OverviewTransaction } from 'src/models/OverviewTransaction';
 import { SummaryTransaction } from "src/models/SummaryTransaction";
-import { getExpenseTree, getOverviewTransactions, getSummaryTransactions } from '../api/transactionApi';
+import { getExpenseTree, getInvestTransactions, getOverviewTransactions, getSavingTransactions, getSummaryTransactions } from '../api/transactionApi';
 import { Transaction } from 'src/models/Transaction';
 import { ExpenseTreeMapModel } from 'src/models/ExpenseTreeMapModel';
 
@@ -12,6 +12,8 @@ export function useOverviewTransactions(params: FetchTransactionsParams, transac
     const [overview, setData] = useState<OverviewTransaction | null>(null);
     const [summary, setDataSummary] = useState<SummaryTransaction | null>(null);
     const [expenseTreeMap, setExpenseTreeMap] = useState<ExpenseTreeMapModel[] | null>(null);
+    const [invest, setInvest] = useState<Transaction[] | null>(null);
+    const [saving, setSaving] = useState<Transaction[] | null>(null);
     const [, setLoading] = useState(loading);
     const [error, setError] = useState<Error>();
 
@@ -38,6 +40,16 @@ export function useOverviewTransactions(params: FetchTransactionsParams, transac
             .catch(setError)
             .finally(() => setLoading(false));
 
+        getSavingTransactions(params)
+            .then(setSaving)
+            .catch(setError)
+            .finally(() => setLoading(false));
+
+        getInvestTransactions(params)
+            .then(setInvest)
+            .catch(setError)
+            .finally(() => setLoading(false));
+
 
     }, [JSON.stringify(params)]); // Update when filters change
 
@@ -50,6 +62,8 @@ export function useOverviewTransactions(params: FetchTransactionsParams, transac
         currentBalance,
         loading,
         error,
-        expenseTreeMap
+        expenseTreeMap,
+        saving,
+        invest
     };
 }

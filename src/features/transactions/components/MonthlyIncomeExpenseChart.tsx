@@ -12,8 +12,8 @@ type Transaction = {
 type Props = {
     transactions: Transaction[];
 };
-
 export default function MonthlyIncomeExpenseChart({ transactions }: Props) {
+
     // Group by month
     const dataMap = new Map<string, { income: number; expense: number }>();
 
