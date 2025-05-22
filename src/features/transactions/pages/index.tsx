@@ -10,14 +10,17 @@ import { useState } from 'react';
 
 export default function Home() {
     const {
+        transactions,
         error,
         loading,
         filters,
         handleChange,
-        sortOrder,
         sortColumn,
-        sortedTransactions,
+        sortOrder,
         handleSort,
+        sortedTransactions,
+        overview,
+        summary,
         totalDebit,
         totalCredit,
         netChange,
@@ -64,12 +67,30 @@ export default function Home() {
                             totalCredit={totalCredit}
                             netChange={netChange}
                             currentBalance={currentBalance}
+                            income={overview?.income || 0}
+                            expense={overview?.expense || 0}
+                            saving={overview?.saving || 0}
+                            total={summary?.total || 0}
+                            balance={summary?.balance || 0}
+                            totalSaving={summary?.totalSaving || 0}
+                            invest={summary?.invest || 0}
+                            transactions={summary?.transactions || 0}
                         />
                         <MonthlyIncomeExpenseChart transactions={sortedTransactions} />
                         <BalanceLineChart data={sortedTransactions.map(tx => ({
                             transaction_date: tx.transaction_date,
                             balance: tx.balance,
                         }))} />
+
+                        {/* Filters and table */}
+                        <TableTransaction
+                            loading={loading}
+                            error={error}
+                            handleSort={handleSort}
+                            sortColumn={sortColumn}
+                            sortOrder={sortOrder}
+                            sortedTransactions={sortedTransactions}
+                        />
                     </section>
 
                     <section id="monthly">
@@ -92,15 +113,6 @@ export default function Home() {
                         {/* Top spending, top category, highest month, etc. */}
                     </section>
 
-                    {/* Filters and table */}
-                    <TableTransaction
-                        loading={loading}
-                        error={error}
-                        handleSort={handleSort}
-                        sortColumn={sortColumn}
-                        sortOrder={sortOrder}
-                        sortedTransactions={sortedTransactions}
-                    />
                 </main>
             </div>
         </>

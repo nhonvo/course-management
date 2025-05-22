@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTransactionData } from './useTransactionData';
 import { SortableColumn } from '../type/SortableColumn';
 import { sortTransactions } from 'src/lib/sortTransactions';
+import { useOverviewTransactions } from './useOverviewTransactions';
 
 export function useTransactions() {
     const { transactions, error, loading, filters, handleChange } = useTransactionData();
@@ -21,10 +22,15 @@ export function useTransactions() {
 
     const sortedTransactions = sortTransactions(transactions, sortColumn, sortOrder);
 
-    const totalDebit = sortedTransactions.reduce((acc, tx) => acc + (tx.debit || 0), 0);
-    const totalCredit = sortedTransactions.reduce((acc, tx) => acc + (tx.credit || 0), 0);
-    const netChange = totalCredit - totalDebit;
-    const currentBalance = sortedTransactions.at(-1)?.balance || 0;
+    const {
+        overview,
+        summary,
+        totalDebit: totalDebit,
+        totalCredit: totalCredit,
+        netChange: netChange,
+        currentBalance: currentBalance,
+    } = useOverviewTransactions(filters, sortedTransactions, loading);
+
 
     return {
         transactions,
@@ -36,6 +42,8 @@ export function useTransactions() {
         sortOrder,
         handleSort,
         sortedTransactions,
+        overview,
+        summary,
         totalDebit,
         totalCredit,
         netChange,

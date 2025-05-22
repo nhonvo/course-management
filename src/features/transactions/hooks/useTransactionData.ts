@@ -34,5 +34,5 @@ export function useTransactionData() {
             .finally(() => setLoading(false));
     }, [filters]);
 
-    return { transactions, error, loading, filters, handleChange };
+    return { transactions, error, loading, filters, handleChange, setTransactions };
 }
