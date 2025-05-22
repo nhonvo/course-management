@@ -7,6 +7,8 @@ import BalanceLineChart from '../components/BalanceLineChart';
 import MonthlyIncomeExpenseChart from '../components/MonthlyIncomeExpenseChart';
 import TableTransaction from '../components/TableTransaction';
 import { useState } from 'react';
+import ExpenseTreeMap from '../components/ExpenseTreeMap';
+import DetailedTransactionAnalysis from '../components/DetailedTransactionAnalysisChart';
 
 export default function Home() {
     const {
@@ -25,6 +27,7 @@ export default function Home() {
         totalCredit,
         netChange,
         currentBalance,
+        expenseTreeMap
     } = useTransactions();
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -96,11 +99,13 @@ export default function Home() {
                     <section id="monthly">
                         <h2 className="text-xl font-semibold">Monthly</h2>
                         {/* Add Monthly charts or data here */}
+                        <ExpenseTreeMap data={expenseTreeMap ?? []} />
                     </section>
 
                     <section id="saving">
                         <h2 className="text-xl font-semibold">Saving & Investment</h2>
                         {/* Add savings/investment insights here */}
+                        <DetailedTransactionAnalysis data={sortedTransactions} />
                     </section>
 
                     <section id="rent">

@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import { FetchTransactionsParams } from 'src/models/FetchTransactionsParams';
 import { OverviewTransaction } from 'src/models/OverviewTransaction';
 import { SummaryTransaction } from "src/models/SummaryTransaction";
-import { getOverviewTransactions, getSummaryTransactions } from '../api/transactionApi';
+import { getExpenseTree, getOverviewTransactions, getSummaryTransactions } from '../api/transactionApi';
 import { Transaction } from 'src/models/Transaction';
+import { ExpenseTreeMapModel } from 'src/models/ExpenseTreeMapModel';
 
 export function useOverviewTransactions(params: FetchTransactionsParams, transactions: Transaction[], loading: boolean) {
     const [overview, setData] = useState<OverviewTransaction | null>(null);
     const [summary, setDataSummary] = useState<SummaryTransaction | null>(null);
+    const [expenseTreeMap, setExpenseTreeMap] = useState<ExpenseTreeMapModel[] | null>(null);
     const [, setLoading] = useState(loading);
     const [error, setError] = useState<Error>();
 
@@ -31,6 +33,12 @@ export function useOverviewTransactions(params: FetchTransactionsParams, transac
             .catch(setError)
             .finally(() => setLoading(false));
 
+        getExpenseTree(params)
+            .then(setExpenseTreeMap)
+            .catch(setError)
+            .finally(() => setLoading(false));
+
+
     }, [JSON.stringify(params)]); // Update when filters change
 
     return {
@@ -41,6 +49,7 @@ export function useOverviewTransactions(params: FetchTransactionsParams, transac
         netChange,
         currentBalance,
         loading,
-        error
+        error,
+        expenseTreeMap
     };
 }

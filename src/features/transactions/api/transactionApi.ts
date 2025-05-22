@@ -1,4 +1,5 @@
 import { fetcher } from "src/lib/api-client/fetcher";
+import { ExpenseTreeMapModel } from "src/models/ExpenseTreeMapModel";
 import { FetchTransactionsParams } from "src/models/FetchTransactionsParams";
 import { OverviewTransaction } from "src/models/OverviewTransaction";
 import { SummaryTransaction } from "src/models/SummaryTransaction";
@@ -17,4 +18,9 @@ export const getOverviewTransactions = async (params: FetchTransactionsParams): 
 export const getSummaryTransactions = async (params: FetchTransactionsParams): Promise<SummaryTransaction> => {
   const query = new URLSearchParams(params as Record<string, string>).toString();
   return fetcher<SummaryTransaction>(`/api/v1/transactions/summary?${query}`);
+};
+
+export const getExpenseTree = async (params: FetchTransactionsParams): Promise<ExpenseTreeMapModel[]> => {
+  const query = new URLSearchParams(params as Record<string, string>).toString();
+  return fetcher<ExpenseTreeMapModel[]>(`/api/v1/transactions/expense-tree?${query}`);
 };
