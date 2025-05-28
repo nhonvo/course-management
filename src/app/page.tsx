@@ -1,10 +1,10 @@
 import { Toaster } from 'react-hot-toast';
-import Home from 'src/features/transactions/pages';
+import Dashboard from 'src/features/transactions/pages';
 
 const Page = () => {
     return (
         <>
-            <Home />
+            <Dashboard />
             <Toaster />
         </>
     );

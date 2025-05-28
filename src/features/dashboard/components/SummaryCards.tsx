@@ -52,10 +52,6 @@ export default function SummaryCards(props: SummaryCardsProps) {
     } = props;
 
     const items: SummaryCardItemProps[] = [
-        { label: 'Total Debit', value: totalDebit, color: 'text-red-600' },
-        { label: 'Total Credit', value: totalCredit, color: 'text-green-600' },
-        { label: 'Net Change', value: netChange, color: netChange >= 0 ? 'text-green-600' : 'text-red-600' },
-        { label: 'Current Balance', value: currentBalance, color: 'text-blue-600' },
         { label: 'Income', value: income, color: 'text-green-600' },
         { label: 'Saving', value: saving, color: 'text-blue-600' },
         { label: 'Total assets', value: total, color: 'text-green-600' },
@@ -64,6 +60,10 @@ export default function SummaryCards(props: SummaryCardsProps) {
         { label: 'Total Saving', value: totalSaving, color: 'text-orange-500' },
         { label: 'Invest', value: invest, color: 'text-purple-600' },
         { label: 'Transactions', value: transactions, color: 'text-gray-600' },
+        { label: 'Total Debit', value: totalDebit, color: 'text-red-600' },
+        { label: 'Total Credit', value: totalCredit, color: 'text-green-600' },
+        { label: 'Net Change', value: netChange, color: netChange >= 0 ? 'text-green-600' : 'text-red-600' },
+        { label: 'Current Balance', value: currentBalance, color: 'text-blue-600' },
     ];
 
     return (
