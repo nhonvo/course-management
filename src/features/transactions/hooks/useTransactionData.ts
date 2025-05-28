@@ -17,9 +17,10 @@ export function useTransactionData() {
         offset: 0,
         clean: true,
         limit: -1,
-        // start_date: '2023-01-01',
-        start_date: start_date,
-        end_date: end_date,
+        start_date: '2023-01-01',
+        end_date: '2023-04-01',
+        // start_date: start_date,
+        // end_date: end_date,
     });
 
     const handleChange = (name: string, value: string | number | boolean) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { MonthlyReportItem } from "../../service/houseFeeService";
+import { MonthlyReportItem } from "src/features/transactions/service/houseFeeService";
 
 
 type Props = {

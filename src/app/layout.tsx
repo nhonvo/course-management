@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Course Management",
-  description: "Manage course and subscription",
+  title: "Financial Dashboard",
+  description: "My Personal Financial Dashboard",
 };
 
 export default function RootLayout({
@@ -25,9 +27,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`flex h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <Navbar />
+          <main className="p-6 overflow-y-auto">
+            <div className="min-h-screen max-w-screen flex flex-col md:flex-row">
+              <Sidebar />
+              {children}
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );

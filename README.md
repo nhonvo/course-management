@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+.
+├── app/                              # Next.js App Router
+│   ├── layout.tsx                    # Root layout
+│   ├── page.tsx                      # Root landing/home page
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── dashboard/                    # Main dashboard layout
+│   │   ├── layout.tsx                # Sidebar or topbar layout
+│   │   └── page.tsx
+│   ├── house-fee/                    # House fee module pages
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   └── saving/                       # Saving module pages
+│       ├── layout.tsx
+│       └── page.tsx
+│
+├── features/                         # Domain-driven feature modules
+│   ├── transactions/
+│   │   ├── api/
+│   │   │   └── transactionApi.ts
+│   │   ├── components/
+│   │   │   ├── BalanceLineChart.tsx
+│   │   │   ├── DetailedTransactionAnalysisChart.tsx
+│   │   │   ├── ExpenseTreeMap.tsx
+│   │   │   ├── MonthlyIncomeExpenseChart.tsx
+│   │   │   ├── SummaryCards.tsx
+│   │   │   ├── TableTransaction.tsx
+│   │   │   ├── TransactionDistributionChart.tsx
+│   │   │   └── TransactionFilters.tsx
+│   │   ├── hooks/
+│   │   │   ├── useOverviewTransactions.ts
+│   │   │   ├── useTransactionData.ts
+│   │   │   └── useTransactions.ts
+│   │   ├── service/
+│   │   │   └── transactionService.ts
+│   │   └── types/
+│   │       └── transaction.ts
+│
+│   ├── house-fee/
+│   │   ├── api/
+│   │   │   └── houseFeeApi.ts
+│   │   ├── components/
+│   │   │   ├── AreaChartComponent.tsx
+│   │   │   ├── HouseFeeChart.tsx
+│   │   │   ├── HouseFeeSummary.tsx
+│   │   │   └── MonthlyExpenseTable.tsx
+│   │   ├── service/
+│   │   │   └── houseFeeService.ts
+│   │   └── types/
+│   │       └── houseFee.ts
+│
+│   └── saving/
+│       ├── api/
+│       │   └── savingApi.ts
+│       ├── components/
+│       │   ├── CumulativeBalanceLineChart.tsx
+│       │   ├── MonthlyBalanceBarChart.tsx
+│       │   └── SavingTable.tsx
+│       ├── service/
+│       │   └── savingService.ts
+│       └── types/
+│           └── saving.ts
+│
+├── ui/                               # Shared, reusable UI components
+│   ├── Button.tsx
+│   ├── Card.tsx
+│   ├── Table.tsx
+│   ├── ChartWrapper.tsx
+│   └── Spinner.tsx
+│
+├── lib/                              # Utility and helper functions
+│   ├── sortTransactions.ts
+│   ├── utilities.ts
+│   ├── auth.ts                       # Token/session helper
+│   ├── constants.ts                  # Global constants (e.g., colors)
+│   └── api-client/
+│       └── fetcher.ts
+│
+├── middleware.ts                     # Middleware for auth, logging
+│
+├── models/                           # Data shape definitions (DB-level or DTOs)
+│   ├── ExpenseTreeMapModel.ts
+│   ├── FetchTransactionsParams.ts
+│   ├── OverviewTransaction.ts
+│   ├── SummaryTransaction.ts
+│   └── Transaction.ts
+│
+├── types/                            # Global and API-specific types
+│   ├── api.ts
+│   ├── filters.ts
+│   └── chart.ts
+│
+├── shared/                           # Global shared services/utilities
+│   └── toastService.ts
+│
+├── public/                           # Static files (images, etc.)
+│   └── assets/
+│       └── logo.png
+│
+├── tests/                            # Unit and integration tests
+│   ├── components/
+│   └── services/
+│
+├── scripts/                          # Useful automation or seed scripts
+│   └── seed.ts
+│
+├── docs/                             # Developer documentation
+│   ├── architecture.md
+│   └── getting-started.md
+│
+├── .eslintrc.js                      # Linting config
+├── .prettierrc                       # Formatting rules
+├── jest.config.ts                    # Jest testing config
+├── tsconfig.json                     # TypeScript config
+└── next.config.js                    # Next.js config
