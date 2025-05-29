@@ -1,7 +1,7 @@
 import React from "react";
 import MonthlyExpenseTable from "./MonthlyExpenseTable";
 import AreaChartComponent from "./AreaChartComponent";
-import { MonthlyReportItem } from "src/features/transactions/service/houseFeeService";
+import { MonthlyReportItem } from "src/features/houseFee/service/houseFeeService";
 
 type Props = {
     monthlyReport: MonthlyReportItem[];

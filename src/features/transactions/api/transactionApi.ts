@@ -6,7 +6,12 @@ import { SummaryTransaction } from "src/models/SummaryTransaction";
 import { Transaction } from "src/models/Transaction";
 
 export const getTransactions = async (params: FetchTransactionsParams): Promise<Transaction[]> => {
-  const query = new URLSearchParams(params as Record<string, string>).toString();
+  const filteredParams = { ...params };
+
+  if (!filteredParams.start_date) delete filteredParams.start_date;
+  if (!filteredParams.end_date) delete filteredParams.end_date;
+
+  const query = new URLSearchParams(filteredParams as Record<string, string>).toString();
   return fetcher<Transaction[]>(`/api/v1/transactions?${query}`);
 };
 

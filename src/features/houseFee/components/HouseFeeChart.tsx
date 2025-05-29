@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { MonthlyHouseFee } from 'src/features/transactions/service/houseFeeService';
+import { MonthlyHouseFee } from 'src/features/houseFee/service/houseFeeService';
 
 
 type Props = {

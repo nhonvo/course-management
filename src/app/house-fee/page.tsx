@@ -1,18 +1,20 @@
 'use client';
 
 import HouseFeeSummary from 'src/features/houseFee/components/HouseFeeSummary';
-import { useTransactions } from '../../features/transactions/hooks/useTransactions';
 import {
     filterHouseFeeTransactions,
     groupHouseFeeMonthlyTotals,
     mergeMonthlyReports,
     prepareHouseFeeReport
-} from '../../features/transactions/service/houseFeeService';
+} from '../../features/houseFee/service/houseFeeService';
 import HouseFeeChart from 'src/features/houseFee/components/HouseFeeChart';
 import MonthlyExpenseTable from 'src/features/houseFee/components/MonthlyExpenseTable';
+import { useTransactionData } from 'src/features/dashboard/hooks/useTransactionData';
 
 export default function HouseFee() {
-    const { transactions } = useTransactions();
+    const {
+        transactions,
+    } = useTransactionData();
 
     const rentHouseFiltered = filterHouseFeeTransactions(transactions, ['tiền nhà']);
     const rentHouseGrouped = groupHouseFeeMonthlyTotals(rentHouseFiltered);

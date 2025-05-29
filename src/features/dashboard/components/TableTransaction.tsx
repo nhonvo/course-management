@@ -1,6 +1,6 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { SortableColumn } from '../../transactions/type/SortableColumn';
+import { SortableColumn } from '../../../lib/type/SortableColumn';
 import { currencyFormat } from 'src/lib/utilities';
 import { Transaction } from 'src/models/Transaction';
 

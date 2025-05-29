@@ -1,15 +1,23 @@
 'use client';
 
-import { useTransactions } from '../../features/transactions/hooks/useTransactions';
-import DetailedTransactionAnalysis from '../../features/dashboard/components/DetailedTransactionAnalysisChart';
-import TransactionDistributionChart from '../../features/dashboard/components/TransactionDistributionChart';
-import { SavingService } from '../../features/transactions/service/savingService';
+import { SavingService } from '../../features/saving/service/savingService';
 import SavingTable from '../../features/saving/components/SavingTable';
 import CumulativeBalanceLineChart from '../../features/saving/components/CumulativeBalanceLineChart';
 import MonthlyBalanceBarChart from '../../features/saving/components/MonthlyBalanceBarChart';
+import { useInvestData } from 'src/features/saving/hooks/useInvestData';
+import { useSavingData } from 'src/features/saving/hooks/useSavingData';
+import { TransactionFiltersProps } from 'src/models/TransactionFilters';
 
 export default function SavingPage() {
-    const { saving, invest, transactions } = useTransactions();
+    const params: TransactionFiltersProps = {
+        order_by: true,
+        sort_by: 'debit',
+        offset: 0,
+        limit: -1,
+        clean: true,
+    };
+    const { saving } = useSavingData(params);
+    const { invest } = useInvestData(params);
 
     const savingService = new SavingService(saving ?? []);
     const investService = new SavingService(invest ?? []);
@@ -35,16 +43,6 @@ export default function SavingPage() {
                 <p className="text-gray-600">
                     Track your savings and investment progress over time. Analyze trends and gain insights to improve your financial planning.
                 </p>
-            </section>
-
-            {/* Insights */}
-            <section>
-                <h2 className="text-2xl font-semibold mb-4">Spending Behavior Analysis</h2>
-                <p className="text-gray-600 mb-6">
-                    Understand your transaction patterns with charts that show distribution and category behavior.
-                </p>
-                <DetailedTransactionAnalysis data={transactions} />
-                <TransactionDistributionChart transactions={transactions} />
             </section>
 
             {/* Savings Section */}

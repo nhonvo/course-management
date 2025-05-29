@@ -1,5 +1,5 @@
 import { Toaster } from 'react-hot-toast';
-import Dashboard from 'src/features/transactions/pages';
+import Dashboard from './dashboard/page';
 
 const Page = () => {
     return (
