@@ -1,4 +1,3 @@
-import { useTotalCalculations } from './useTotalCalculations';
 import { useOverviewData } from './useOverviewData';
 import { useSummaryData } from './useSummaryData';
 import { useExpenseTreeData } from './useExpenseTreeData';
@@ -11,17 +10,12 @@ export function useTransactionOverview(params: FetchTransactionsParams, transact
     const { summary, error: summaryError } = useSummaryData(params);
     const { expenseTreeMap, error: treeError } = useExpenseTreeData(params);
 
-    const { totalDebit, totalCredit, netChange, currentBalance } = useTotalCalculations(transactions);
 
     const error = overviewError || summaryError || treeError;
 
     return {
         overview,
         summary,
-        totalDebit,
-        totalCredit,
-        netChange,
-        currentBalance,
         loading,
         error,
         expenseTreeMap,

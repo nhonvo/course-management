@@ -1,7 +1,7 @@
 export function getDefaultDateRange(): { start_date: string; end_date: string } {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); // 0-indexed
+    const currentMonth = now.getMonth() + 1; // 0-indexed
 
     const endDate = new Date(currentYear, currentMonth, 19); // 19th of current month
     const startMonth = currentMonth === 0 ? 11 : currentMonth - 1;

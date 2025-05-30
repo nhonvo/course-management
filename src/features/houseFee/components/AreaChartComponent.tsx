@@ -8,27 +8,21 @@ import {
     CartesianGrid,
     ResponsiveContainer,
 } from "recharts";
+import { MonthlyReportItem } from "../service/houseFeeService";
+import { currencyFormat } from "src/lib/utilities";
 
 type Props = {
-    data: any[];
+    data: MonthlyReportItem[];
     dataKey: string;
     strokeColor: string;
     fillColor: string;
     name: string;
 };
 
-const currencyFormatter = (value: number) =>
-    value.toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-        maximumFractionDigits: 0,
-    });
-
 const AreaChartComponent: React.FC<Props> = ({
     data,
     dataKey,
     strokeColor,
-    fillColor,
     name,
 }) => (
     <ResponsiveContainer width="100%" height={250}>
@@ -40,9 +34,9 @@ const AreaChartComponent: React.FC<Props> = ({
                 </linearGradient>
             </defs>
             <XAxis dataKey="date" />
-            <YAxis tickFormatter={currencyFormatter} />
+            <YAxis tickFormatter={currencyFormat} />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip formatter={currencyFormatter} />
+            <Tooltip formatter={currencyFormat} />
             <Area
                 type="monotone"
                 dataKey={dataKey}

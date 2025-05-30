@@ -12,6 +12,7 @@ import { useTransactionSorting } from "src/features/dashboard/hooks/useTransacti
 import { useTotalCalculations } from "src/features/dashboard/hooks/useTotalCalculations";
 import { useTransactionOverview } from "src/features/dashboard/hooks/useTransactionOverview";
 import { getDefaultDateRange } from "src/lib/utilities";
+import { Transaction } from "src/models/Transaction";
 
 export default function Dashboard() {
     const { start_date, end_date } = getDefaultDateRange();
@@ -84,7 +85,7 @@ export default function Dashboard() {
                 </p>
                 <MonthlyIncomeExpenseChart transactions={sortedTransactions} />
                 <BalanceLineChart
-                    data={sortedTransactions.map((tx: any) => ({
+                    data={sortedTransactions.map((tx: Transaction) => ({
                         transaction_date: tx.transaction_date,
                         balance: tx.balance,
                     }))}
